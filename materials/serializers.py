@@ -4,11 +4,11 @@ from materials.models import Course, Lesson
 
 
 class CourseSerializer(ModelSerializer):
-    class meta:
+    class Meta:
         model = Course
         fields = '__all__'
 
 class LessonSerializer(ModelSerializer):
-    class meta:
+    class Meta:
         model = Lesson
         fields = '__all__'
