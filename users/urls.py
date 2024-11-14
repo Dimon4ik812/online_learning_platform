@@ -1,14 +1,15 @@
 from rest_framework.routers import SimpleRouter
-from materials.apps import MaterialsConfig
+from users.apps import UsersConfig
 
-from users.views import PaymentsViewSet
+
+from users.views import PaymentsViewSet, CustomsUserViewSet
 
 router = SimpleRouter()
 
 
 router.register(r'payments', PaymentsViewSet, basename='payments')
-
-app_name = MaterialsConfig.name
+router.register(r'users', CustomsUserViewSet, basename='users')
+app_name = UsersConfig.name
 
 urlpatterns = []
 

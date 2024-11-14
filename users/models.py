@@ -34,7 +34,7 @@ class CustomsUser(AbstractUser):
 class Payments(models.Model):
     PAYMENT_METHOD_CHOICES = [("наличные", "наличные"), ("перевод на счет", "перевод на счет")]
 
-    user = models.ForeignKey(CustomsUser, verbose_name="Пользователь", blank=True, null=True, on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomsUser, verbose_name="Пользователь", blank=True, null=True,related_name='payment_history', on_delete=models.CASCADE)
     payment_date = models.DateTimeField(auto_now_add=True, verbose_name="Дата оплаты")
     paid_course = models.ForeignKey(Course, null=True, blank=True, on_delete=models.CASCADE, verbose_name="Оплаченный курс")
     paid_lesson = models.ForeignKey(Lesson, null=True, blank=True, on_delete=models.CASCADE, verbose_name="Оплаченный урок")
