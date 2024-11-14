@@ -5,6 +5,7 @@ from materials.models import Course, Lesson
 from materials.serializers import CourseSerializer, LessonSerializer, CourseDetailSerializer
 
 
+
 class CourseViewSet(ModelViewSet):
     queryset = Course.objects.all()
 
@@ -34,3 +35,5 @@ class LessonUpdateAPIView(generics.UpdateAPIView):
 
 class LessonDestroyAPIView(generics.DestroyAPIView):
     queryset = Lesson.objects.all()
+
+
