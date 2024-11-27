@@ -2,6 +2,7 @@ from rest_framework.fields import SerializerMethodField
 from rest_framework.serializers import ModelSerializer
 
 from materials.models import Course, Lesson
+from materials.validators import LinkToVideoValidator
 
 
 class CourseSerializer(ModelSerializer):
@@ -14,6 +15,7 @@ class LessonSerializer(ModelSerializer):
     class Meta:
         model = Lesson
         fields = "__all__"
+        validators = [LinkToVideoValidator(field="video_link")]
 
 
 class CourseDetailSerializer(ModelSerializer):
