@@ -1,4 +1,6 @@
 from django.shortcuts import get_object_or_404
+from django.utils.decorators import method_decorator
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework import generics, views, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -10,6 +12,10 @@ from materials.serializers import CourseDetailSerializer, CourseSerializer, Less
 from users.permissions import IsModers, IsOwner
 
 
+@method_decorator(
+    name="list",
+    decorator=swagger_auto_schema(operation_description="description from swagger_auto_schema via method_decorator"),
+)
 class CourseViewSet(ModelViewSet):
     pagination_class = CoursePaginator
     queryset = Course.objects.all()
