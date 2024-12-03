@@ -20,6 +20,8 @@ isort = "^5.13.2"
 flake8 = "^7.1.1"
 coverage = "^7.6.8"
 stripe = "^11.3.0"
+celery = "^5.4.0"
+django-celery-beat = "^2.7.0"
 
 
 [build-system]
