@@ -5,11 +5,14 @@ from rest_framework import generics, views, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
+import datetime
+from django.utils import timezone
 
 from materials.models import Course, Lesson, Subscription
 from materials.paginators import CoursePaginator, LessonPaginator
 from materials.serializers import CourseDetailSerializer, CourseSerializer, LessonSerializer
 from users.permissions import IsModers, IsOwner
+from materials.task import send_course_update_notification
 
 
 @method_decorator(
@@ -39,6 +42,11 @@ class CourseViewSet(ModelViewSet):
         course = serializer.save()
         course.owner = self.request.user
         course.save()
+        now = timezone.now()
+
+        # Проверяем время последнего обновления
+        if course.updated_at < now - datetime.timedelta(hours=4):
+            send_course_update_notification.delay(course.id)
 
 
 class LessonCreateAPIView(generics.CreateAPIView):
