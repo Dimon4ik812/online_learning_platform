@@ -21,9 +21,10 @@ def send_course_update_notification(course_id):
         )
 
 
+
 @shared_task
 def block_inactive_users():
     """Проверка логирования пользователей в последние 30 дней"""
     month_ago = timezone.now() - timedelta(days=30)
-    inactive_users = User.objects.filter(last_login__lt=month_ago, is_active=True)
+    inactive_users = User.objects.filter(last_login__lt=month_ago, is_active=True).exclude(last_login=None)
     inactive_users.update(is_active=False)
