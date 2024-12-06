@@ -21,7 +21,6 @@ def send_course_update_notification(course_id):
         )
 
 
-
 @shared_task
 def block_inactive_users():
     """Проверка логирования пользователей в последние 30 дней"""
