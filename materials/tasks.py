@@ -4,6 +4,7 @@ from materials.models import Subscription
 from django.utils import timezone
 from datetime import timedelta
 from django.contrib.auth.models import User
+from users.models import CustomsUser
 from config import settings
 
 
@@ -25,5 +26,5 @@ def send_course_update_notification(course_id):
 def block_inactive_users():
     """Проверка логирования пользователей в последние 30 дней"""
     month_ago = timezone.now() - timedelta(days=30)
-    inactive_users = User.objects.filter(last_login__lt=month_ago, is_active=True).exclude(last_login=None)
+    inactive_users = CustomsUser.objects.filter(last_login__lt=month_ago, is_active=True).exclude(last_login=None)
     inactive_users.update(is_active=False)
