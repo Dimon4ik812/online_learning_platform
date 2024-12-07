@@ -171,7 +171,7 @@ CELERY_TASK_TIME_LIMIT = 30 * 60
 
 CELERY_BEAT_SCHEDULE = {
     'block-inactive-users-every-month': {
-        'task': 'materials.task.block_inactive_users',
+        'task': 'materials.tasks.block_inactive_users',
         'schedule': crontab(day_of_week='*', hour='0', minute='0'),
     },
 }

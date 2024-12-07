@@ -12,7 +12,7 @@ from materials.models import Course, Lesson, Subscription
 from materials.paginators import CoursePaginator, LessonPaginator
 from materials.serializers import CourseDetailSerializer, CourseSerializer, LessonSerializer
 from users.permissions import IsModers, IsOwner
-from materials.task import send_course_update_notification
+from materials.tasks import send_course_update_notification
 
 
 @method_decorator(
