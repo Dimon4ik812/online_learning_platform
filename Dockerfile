@@ -8,4 +8,4 @@ COPY . .
 RUN poetry install --only main
 RUN poetry remove python-dotenv
 RUN poetry add python-dotenv
-CMD ["sh", "-c", "python manage.py migrate && python manage.py runserver"]
+CMD ["sh", "-c", "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"]
