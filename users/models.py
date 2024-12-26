@@ -34,15 +34,26 @@ class CustomsUser(AbstractUser):
 class Payments(models.Model):
     PAYMENT_METHOD_CHOICES = [("наличные", "наличные"), ("перевод на счет", "перевод на счет")]
 
-    user = models.ForeignKey(CustomsUser, verbose_name="Пользователь", blank=True, null=True,related_name='payment_history', on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        CustomsUser,
+        verbose_name="Пользователь",
+        blank=True,
+        null=True,
+        related_name="payment_history",
+        on_delete=models.CASCADE,
+    )
     payment_date = models.DateTimeField(auto_now_add=True, verbose_name="Дата оплаты")
-    paid_course = models.ForeignKey(Course, null=True, blank=True, on_delete=models.CASCADE, verbose_name="Оплаченный курс")
-    paid_lesson = models.ForeignKey(Lesson, null=True, blank=True, on_delete=models.CASCADE, verbose_name="Оплаченный урок")
+    paid_course = models.ForeignKey(
+        Course, null=True, blank=True, on_delete=models.CASCADE, verbose_name="Оплаченный курс"
+    )
+    paid_lesson = models.ForeignKey(
+        Lesson, null=True, blank=True, on_delete=models.CASCADE, verbose_name="Оплаченный урок"
+    )
     payment_amount = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Сумма оплаты")
     payment_method = models.CharField(max_length=50, choices=PAYMENT_METHOD_CHOICES, verbose_name="способ оплаты")
 
     def __str__(self):
-        return f'{self.user} - {self.payment_amount} - {self.payment_date}'
+        return f"{self.user} - {self.payment_amount} - {self.payment_date}"
 
     class Meta:
         verbose_name = "Платеж"
