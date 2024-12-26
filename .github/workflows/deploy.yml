@@ -6,11 +6,17 @@ on:
       - feature/home_work_35_2
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
+
     steps:
-    - name: Checkout code
+    - name: Check out code
       uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.13'
 
     - name: Set up Poetry
       uses: abatilo/actions-poetry@v2.0.0
@@ -29,7 +35,7 @@ jobs:
       with:
         host: ${{ secrets.SERVER_IP }}
         username: ${{ secrets.SERVER_USER }}
-        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        key: ${{ secrets.}}
         script: |
           cd /root/new_project_directory/-Django-REST-Framework
           git pull origin ${{ github.ref }}
