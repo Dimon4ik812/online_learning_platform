@@ -28,13 +28,21 @@ jobs:
     - name: Run tests
       run: poetry run python manage.py test --parallel
 
-    - name: Deploy to server
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v3
+      with:
+          context: .
+          push: true
+          tags: ${{ secrets.DOCKER_IMAGE_NAME }}:${{ github.sha }}
+
+    - name: Deploy to server (Docker)
       uses: appleboy/ssh-action@master
       with:
-        host: ${{ secrets.SERVER_IP }}
-        username: ${{ secrets.SERVER_USER }}
-        key: ${{ secrets.SSH_KEY }}
-        script: |
-          cd /root/new_project_directory/-Django-REST-Framework
-          git pull origin ${{ github.ref }}
-          sudo systemctl restart gunicorn
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            docker pull ${{ secrets.DOCKER_IMAGE_NAME }}:${{ github.sha }}
+            docker stop django-rest-framework-app || true #Stop if exists
+            docker rm django-rest-framework-app || true #Remove if exists
+            docker run -d -p 8000:8000 --name django-rest-framework-app ${{ secrets.DOCKER_IMAGE_NAME }}:${{ github.sha }}
