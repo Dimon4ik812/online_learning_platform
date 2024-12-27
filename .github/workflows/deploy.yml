@@ -12,13 +12,18 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.13'
+
     - name: Set up Poetry
       uses: abatilo/actions-poetry@v2.0.0
       with:
         poetry-version: '1.6.0'
 
     - name: Install dependencies
-      run: poetry install --no-root  # Установка зависимостей без установки корневого пакета
+      run: poetry install --no-root
 
     - name: Run migrations
       run: poetry run python manage.py migrate
@@ -29,18 +34,18 @@ jobs:
     - name: Build and push Docker image
       uses: docker/build-push-action@v3
       with:
-        context: .
-        push: true  # Включите пуш образа в реестр
-        tags: ${{ secrets.DOCKER_IMAGE_NAME }}:${{ github.sha }}  # Тег для образа
+          context: .
+          push: true
+          tags: ${{ secrets.DOCKER_IMAGE_NAME }}:${{ github.sha }}
 
     - name: Deploy to server (Docker)
       uses: appleboy/ssh-action@master
       with:
-        host: ${{ secrets.SERVER_IP }}
-        username: ${{ secrets.SERVER_USER }}
-        key: ${{ secrets.SSH_PRIVATE_KEY }}
-        script: |
-          docker pull ${{ secrets.DOCKER_IMAGE_NAME }}:${{ github.sha }}  # Пул образа
-          docker stop django-rest-framework-app || true  # Остановка контейнера, если он существует
-          docker rm django-rest-framework-app || true  # Удаление контейнера, если он существует
-          docker run -d -p 8000:8000 --name django-rest-framework-app ${{ secrets.DOCKER_IMAGE_NAME }}:${{ github.sha }}
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            docker pull ${{ secrets.DOCKER_IMAGE_NAME }}:${{ github.sha }}
+            docker stop django-rest-framework-app || true # Stop if exists
+            docker rm django-rest-framework-app || true # Remove if exists
+            docker run -d -p 8000:8000 --name django-rest-framework-app ${{ secrets.DOCKER_IMAGE_NAME }}:${{ github.sha }}
