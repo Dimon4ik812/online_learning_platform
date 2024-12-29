@@ -13,22 +13,29 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up Docker
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y docker.io
-          sudo systemctl start docker
-          sudo systemctl enable docker
-          sudo apt-get install -y docker-compose
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.13'
 
-      - name: Build and run Docker containers
+      - name: Install Poetry
         run: |
-          docker-compose up --build -d
-          docker-compose exec web poetry run python manage.py test  # Укажите команду для запуска тестов
+          curl -sSL https://install.python-poetry.org | python3 -
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
 
-      - name: Stop and remove Docker containers
+      - name: Install dependencies
         run: |
-          docker-compose down
+          poetry install
+
+      - name: Load .env file
+        run: |
+          if [ -f .env ]; then
+            export $(cat .env | xargs)
+          fi
+
+      - name: Run tests
+        run: |
+          poetry run python manage.py test  # Укажите команду для запуска тестов
 
   deploy:
     runs-on: ubuntu-latest
@@ -43,4 +50,4 @@ jobs:
         run: |
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > private_key
           chmod 600 private_key
-          ssh -i private_key root@85.92.111.109 "cd /path/to/your/app && git pull && docker-compose up --build -d && sudo systemctl restart your_service"
+          ssh -i private_key root@85.92.111.109 "cd /path/to/your/app && git pull && poetry install && sudo systemctl restart your_service"
