@@ -25,17 +25,10 @@ jobs:
         run: |
           poetry install
 
-      - name: Run makemigrations
-        run: |
-          poetry run python manage.py makemigrations  # Укажите команду для запуска тестов
-
-      - name: Run migrate
-        run: |
-          poetry run python manage.py migrate  # Укажите команду для запуска тестов
 
       - name: Run tests
         run: |
-          poetry run python manage.py test  # Укажите команду для запуска тестов
+          poetry run python manage.py test  
 
   deploy:
     runs-on: ubuntu-latest
