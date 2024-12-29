@@ -1,9 +1,6 @@
 name: CI
 
-on:
-  push:
-    branches:
-      - feature/home_work_35_2
+on: [push, pull_request]
 
 
 jobs:
@@ -28,8 +25,6 @@ jobs:
         run: |
           poetry install
 
-      - name: Run migrate
-        run:  poetry run python manage.py migrate
 
       - name: Run tests
         run: |
