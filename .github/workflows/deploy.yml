@@ -29,7 +29,7 @@ jobs:
 
       - name: Run tests
         env:
-          DJANGO_SECRET_KEY = "django-insecure-v+8wuiu_1i%43%b^ytzkvvv^mt%)-ycerntl7(4k7!moqt^6gk"
+          DJANGO_SECRET_KEY: "django-insecure-v+8wuiu_1i%43%b^ytzkvvv^mt%)-ycerntl7(4k7!moqt^6gk"
         run: |
           poetry run python manage.py test  # Укажите команду для запуска тестов
 
