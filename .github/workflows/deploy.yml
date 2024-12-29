@@ -29,16 +29,17 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y postgresql-client
+          sudo service postgresql start
 
 
       - name: Run makemigrations
         run: |
           poetry run python manage.py makemigrations
 
-#      - name: Run migrate
-#        run: |
-#          poetry run python manage.py migrate
-#
+      - name: Run migrate
+        run: |
+          poetry run python manage.py migrate
+
 
       - name: Run tests
         run: |
