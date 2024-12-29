@@ -22,26 +22,38 @@ jobs:
       - name: Install dependencies
         run: poetry install
 
-      - name: Setup PostgreSQL (if needed for tests)
+      - name: Setup PostgreSQL
         uses: pgcli/actions/setup-postgres@v1
+        with:
+          password: ${{ secrets.POSTGRES_PASSWORD }} #  <---  Добавьте секрет POSTGRES_PASSWORD
+          username: ${{ secrets.POSTGRES_USER }}     #  <---  Добавьте секрет POSTGRES_USER
+          dbname: ${{ secrets.POSTGRES_DB }}       #  <---  Добавьте секрет POSTGRES_DB
+
       - name: Run migrations
         run: |
           poetry run python manage.py makemigrations
           poetry run python manage.py migrate
+
       - name: Run tests
         run: poetry run python manage.py test
 
+
   deploy:
     runs-on: ubuntu-latest
-    needs: test
+    needs: build-and-test # <--- Исправлено имя job
     if: success()
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
       - name: Deploy to server
-        run: |
-          ssh root@85.92.111.109"cd /path/to/your/app && git pull && poetry install && sudo systemctl restart your_service"
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        uses: appleboy/ssh-action@master # <--- Рекомендуется использовать готовый action
+        with:
+          host: ${{ secrets.SERVER_IP }}  # <---  Добавьте секрет SERVER_IP
+          username: root
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd /path/to/your/app
+            git pull
+            poetry install
+            sudo systemctl restart your_service
