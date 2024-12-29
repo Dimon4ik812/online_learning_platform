@@ -25,7 +25,7 @@ jobs:
 
       - name: Run tests with explicit 'test' argument
         run: |
-          poetry run python manage.py test test 
+          poetry run python -m pytest 
 
   deploy:
     runs-on: ubuntu-latest
