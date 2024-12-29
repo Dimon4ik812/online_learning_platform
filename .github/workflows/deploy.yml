@@ -60,4 +60,4 @@ jobs:
 
       - name: Deploy to server
         run: |
-          ssh -o StrictHostKeyChecking=no -i ${{ secrets.SSH_PRIVATE_KEY }} root@85.92.111.109 "cd /path/to/your/app && git pull && poetry install && sudo systemctl restart nginx"
+          ssh -o StrictHostKeyChecking=no -i ${{ secrets.SSH_PRIVATE_KEY }} /path/to/your/private_key root@85.92.111.109 "cd /path/to/your/app && git pull && poetry install && sudo systemctl restart nginx"
