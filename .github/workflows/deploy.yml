@@ -34,8 +34,10 @@ jobs:
 
       - name: Run tests
         run: |
-          export SECRET_KEY=${{ secrets.SECRET_KEY }}  # Устанавливаем переменную окружения
+          echo "Running tests with SECRET_KEY=${{ secrets.SECRET_KEY }}"
           poetry run python manage.py test  # Укажите команду для запуска тестов
+        env:
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}  # Передаем SECRET_KEY в окружение
 
   deploy:
     runs-on: ubuntu-latest
