@@ -25,6 +25,11 @@ jobs:
         run: |
           poetry install
 
+      - name: Set up PostgreSQL
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y postgresql-client
+
 
       - name: Run tests
         run: |
