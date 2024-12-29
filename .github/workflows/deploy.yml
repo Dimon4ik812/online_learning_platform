@@ -60,6 +60,6 @@ jobs:
 
       - name: Deploy to server
         run: |
-          ssh root@85.92.111.109"cd /path/to/your/app && git pull && poetry install && sudo systemctl restart your_service"
+          ssh -o StrictHostKeyChecking=no root@85.92.111.109 "cd /path/to/your/app && git pull && poetry install && sudo systemctl restart your_service"
         env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+            SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
