@@ -3,7 +3,7 @@ name: CI
 on:
   push:
     branches:
-      - feature/home_work_35_2 #ntcn
+      - feature/home_work_35_2
 
 jobs:
   test:
@@ -28,10 +28,9 @@ jobs:
           poetry install
 
       - name: Run tests
-        env:
-          DJANGO_SECRET_KEY: "django-insecure-v+8wuiu_1i%43%b^ytzkvvv^mt%)-ycerntl7(4k7!moqt^6gk"
         run: |
-          poetry run python manage.py test  # Укажите команду для запуска тестов
+          export SECRET_KEY="${{ secrets.SECRET_KEY }}"  
+          poetry run python manage.py test  
 
   deploy:
     runs-on: ubuntu-latest
@@ -46,4 +45,4 @@ jobs:
         run: |
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > private_key
           chmod 600 private_key
-          ssh -i private_key username@your_server_ip "cd /path/to/your/app && git pull && poetry install && sudo systemctl restart your_service"
+          ssh -i private_key root@85.92.111.109 "cd /path/to/your/app && git pull && poetry install && sudo systemctl restart your_service"
