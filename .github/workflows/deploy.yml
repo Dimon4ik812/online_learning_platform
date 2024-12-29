@@ -31,6 +31,15 @@ jobs:
           sudo apt-get install -y postgresql-client
 
 
+      - name: Run makemigrations
+        run: |
+          poetry run python manage.py makemigrations
+
+      - name: Run migrate
+        run: |
+          poetry run python manage.py migrate 
+          
+
       - name: Run tests
         run: |
           poetry run python manage.py test  
