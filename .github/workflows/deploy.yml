@@ -3,7 +3,8 @@ name: CI
 on:
   push:
     branches:
-      - feature/home_work_35_2 # Укажите Вашу основную ветку
+      - feature/home_work_35_2
+
 
 jobs:
   test:
@@ -27,12 +28,6 @@ jobs:
         run: |
           poetry install
 
-      - name: Load .env file
-        run: |
-          if [ -f .env ]; then
-            export $(cat .env | xargs)
-          fi
-
       - name: Run tests
         run: |
           poetry run python manage.py test  # Укажите команду для запуска тестов
@@ -48,6 +43,6 @@ jobs:
 
       - name: Deploy to server
         run: |
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > private_key
-          chmod 600 private_key
-          ssh -i private_key root@85.92.111.109 "cd /path/to/your/app && git pull && poetry install && sudo systemctl restart your_service"
+          ssh root@85.92.111.109"cd /path/to/your/app && git pull && poetry install && sudo systemctl restart your_service"
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
