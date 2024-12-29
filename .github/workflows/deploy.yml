@@ -3,7 +3,7 @@ name: CI
 on:
   push:
     branches:
-      - feature/home_work_35_2
+      - feature/home_work_35_2 #ntcn
 
 jobs:
   test:
