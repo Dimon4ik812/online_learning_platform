@@ -33,7 +33,7 @@ jobs:
           sudo -u postgres psql -c "ALTER USER postgres PASSWORD '852123654';"
           sudo -u postgres psql -c "CREATE DATABASE materials;"
           sudo -u postgres psql -c "CREATE USER your_user WITH PASSWORD '852123654';"
-          sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE materials TO postgres;
+          sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE materials TO postgres;"
 
 
       - name: Run makemigrations
