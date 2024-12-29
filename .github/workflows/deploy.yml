@@ -3,7 +3,7 @@ name: CI
 on:
   push:
     branches:
-      - feature/home_work_35_2 # Укажите Вашу основную ветку
+      - feature/home_work_35_2 #ntcn
 
 jobs:
   test:
@@ -27,22 +27,16 @@ jobs:
         run: |
           poetry install
 
-      - name: Check SECRET_KEY
-        run: echo "SECRET_KEY is set"
-        env:
-          SECRET_KEY: ${{ secrets.SECRET_KEY }}
-
       - name: Run tests
-        run: |
-          echo "Running tests with SECRET_KEY=${{ secrets.SECRET_KEY }}"
-          poetry run python manage.py test  # Укажите команду для запуска тестов
         env:
-          SECRET_KEY: ${{ secrets.SECRET_KEY }}  # Передаем SECRET_KEY в окружение
+          DJANGO_SECRET_KEY = "django-insecure-v+8wuiu_1i%43%b^ytzkvvv^mt%)-ycerntl7(4k7!moqt^6gk"
+        run: |
+          poetry run python manage.py test  # Укажите команду для запуска тестов
 
   deploy:
     runs-on: ubuntu-latest
     needs: test
-    if: success()  # Деплой только при успешном прохождении тестов
+    if: success()
 
     steps:
       - name: Checkout code
