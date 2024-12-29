@@ -59,7 +59,7 @@ jobs:
                   EMAIL_HOST_PASSWORD: ${{ secrets.EMAIL_HOST_PASSWORD }}
                   fail_on_empty: true
             - name: Run tests
-              run: poetry run python manage.py test
+              run: poetry run python manage.py test #ntcn
 
 #  deploy:
 #    runs-on: ubuntu-latest
