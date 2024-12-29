@@ -28,6 +28,9 @@ jobs:
         run: |
           poetry install
 
+      - name: Run migrate
+        run:  poetry run python manage.py migrate
+
       - name: Run tests
         run: |
           poetry run python manage.py test  # Укажите команду для запуска тестов
