@@ -3,7 +3,7 @@ name: CI
 on:
   push:
     branches:
-      - feature/home_work_35_2
+      - feature/home_work_35_2 # Укажите Вашу основную ветку
 
 jobs:
   test:
@@ -27,15 +27,16 @@ jobs:
         run: |
           poetry install
 
-      - name: Check SECRET_KEY
-        run: echo "SECRET_KEY is set"
-        env:
-          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+      - name: Load .env file
+        run: |
+          if [ -f .env ]; then
+            export $(cat .env | xargs)
+          fi
 
       - name: Run tests
         run: |
-          
-          poetry run python manage.py test
+          poetry run python manage.py test  # Укажите команду для запуска тестов
+
   deploy:
     runs-on: ubuntu-latest
     needs: test
