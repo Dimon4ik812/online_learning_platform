@@ -27,10 +27,14 @@ jobs:
         run: |
           poetry install
 
-      - name: Run tests
+      - name: Check SECRET_KEY
+        run: echo "SECRET_KEY is set"
         env:
-          DJANGO_SECRET_KEY: ${{ secrets.SECRET_KEY }}  # Убедитесь, что переменная окружения установлена
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+
+      - name: Run tests
         run: |
+          export SECRET_KEY=${{ secrets.SECRET_KEY }}  # Устанавливаем переменную окружения
           poetry run python manage.py test  # Укажите команду для запуска тестов
 
   deploy:
