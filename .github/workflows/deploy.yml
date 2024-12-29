@@ -30,6 +30,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y postgresql-client
           sudo service postgresql start
+          sudo -u postgres psql -c "ALTER USER postgres PASSWORD '852123654';"
 
 
       - name: Run makemigrations
