@@ -2,11 +2,9 @@ name: CI
 
 on: [push, pull_request]
 
-
 jobs:
-  test:
+  build-and-test:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -22,13 +20,16 @@ jobs:
           echo "$HOME/.local/bin" >> $GITHUB_PATH
 
       - name: Install dependencies
+        run: poetry install
+
+      - name: Setup PostgreSQL (if needed for tests)
+        uses: pgcli/actions/setup-postgres@v1
+      - name: Run migrations
         run: |
-          poetry install
-
-
+          poetry run python manage.py makemigrations
+          poetry run python manage.py migrate
       - name: Run tests
-        run: |
-          poetry run python manage.py test  
+        run: poetry run python manage.py test
 
   deploy:
     runs-on: ubuntu-latest
