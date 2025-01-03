@@ -15,7 +15,7 @@ services:
     expose:
       - "5432"
     volumes:
-      - pg_data:/var/lib/postgresql/data  # Убедитесь, что здесь используется правильный том
+      - pgvar/lib/postgresql/data  # Использование правильного тома
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U $POSTGRES_USER"]
       interval: 10s
@@ -62,4 +62,4 @@ services:
       - .env
 
 volumes:
-  pg {}  # Объявление тома для базы данных
+  pg_data: {}  # Объявление тома для базы данных
