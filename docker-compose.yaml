@@ -15,7 +15,7 @@ services:
     expose:
       - "5432"
     volumes:
-      - pgvar/lib/postgresql/data  # Исправлено на pg_data
+      - pg_data:/var/lib/postgresql/data  # Убедитесь, что здесь используется правильный том
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U $POSTGRES_USER"]
       interval: 10s
@@ -29,7 +29,7 @@ services:
       - "8000:8000"
     command: sh -c "python3 manage.py migrate && python3 manage.py runserver 0.0.0.0:8000"
     depends_on:
-      - db  # Исправлено на массив
+      - db
     volumes:
       - .:/app
     env_file:
@@ -44,7 +44,7 @@ services:
       - .:/app
     depends_on:
       - redis
-      - db  # Исправлено на массив
+      - db
     env_file:
       - .env
 
@@ -57,7 +57,7 @@ services:
       - .:/app
     depends_on:
       - redis
-      - db  # Исправлено на массив
+      - db
     env_file:
       - .env
 
