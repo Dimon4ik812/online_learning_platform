@@ -1,4 +1,4 @@
-version: "3.8"  # Убедитесь, что версия соответствует Вашей версии Docker Compose
+version: "3"  # Убедитесь, что версия соответствует Вашей версии Docker Compose
 
 services:
   redis:
@@ -38,5 +38,13 @@ services:
     env_file:
       - .env
 
+  celery:  # Убедитесь, что секция celery корректна
+    build: .
+    command: celery -A your_project_name worker --loglevel=info  # Замените your_project_name на имя Вашего проекта
+    depends_on:
+      - db
+    env_file:
+      - .env
+
 volumes:
-  pg {}  # Объявление тома для базы данных
+  pg_data: {}  # Объявление тома для базы данных
