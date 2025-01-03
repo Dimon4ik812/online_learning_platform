@@ -36,6 +36,7 @@ jobs:
           sudo -u postgres psql -c "CREATE ROLE runner WITH LOGIN PASSWORD '852123654';"
           sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE materials TO runner;"
           sudo -u postgres psql -c "GRANT CREATE ON SCHEMA public TO runner;"
+          echo "DATABASE_URL=postgres://runner:852123654@localhost/materials" >> $GITHUB_ENV
 
       - name: Run makemigrations
         run: |
