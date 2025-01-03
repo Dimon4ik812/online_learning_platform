@@ -1,5 +1,3 @@
-version: "3"  # Убедитесь, что версия соответствует Вашей версии Docker Compose
-
 services:
   redis:
     image: redis:latest
@@ -9,17 +7,15 @@ services:
 
   db:
     image: postgres:16-alpine
-    environment:
-      POSTGRES_HOST_AUTH_METHOD: trust
     restart: on-failure
     env_file:
       - .env
     expose:
       - "5432"
     volumes:
-      - pgvar/lib/postgresql/data  # Используйте правильный том
+      - pg_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U $POSTGRES_USER"]
+      test: ["CMD-SHELL", "-c", "pg_isready -U $POSTGRES_USER"]
       interval: 10s
       retries: 5
       timeout: 5s
@@ -28,8 +24,8 @@ services:
     build: .
     tty: true
     ports:
-      - "8000:8000"
-    command: sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+     - "8000:8000"
+    command: sh -c "python3 manage.py migrate && python3 manage.py runserver 0.0.0.0:8000"
     depends_on:
       db:
         condition: service_healthy
@@ -38,13 +34,33 @@ services:
     env_file:
       - .env
 
-  celery:  # Убедитесь, что секция celery корректна
+  celery:
     build: .
-    command: celery -A your_project_name worker --loglevel=info  # Замените your_project_name на имя Вашего проекта
+    tty: true
+    command: celery -A config worker --loglevel=info
+    restart: on-failure
+    volumes:
+      - .:/app
     depends_on:
+      - redis
       - db
+      - app
+    env_file:
+      - .env
+
+  celery_beat:
+    build: .
+    tty: true
+    command: celery -A config beat --loglevel=info
+    restart: on-failure
+    volumes:
+      - .:/app
+    depends_on:
+      - redis
+      - db
+      - app
     env_file:
       - .env
 
 volumes:
-  pg_data: {}  # Объявление тома для базы данных
+  pg_data: {}
