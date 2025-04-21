@@ -1,4 +1,5 @@
 import os
+import sys
 from datetime import timedelta
 from pathlib import Path
 from celery.schedules import crontab
@@ -92,7 +93,7 @@ DATABASES = {
         "NAME": os.getenv("POSTGRES_DB"),
         "USER": os.getenv("POSTGRES_USER"),
         "PASSWORD": os.getenv("POSTGRES_PASSWORD"),
-        "HOST": os.getenv("POSTGRES_HOST"),
+        "HOST": os.getenv('POSTGRES_HOST', 'localhost'),
         "PORT": os.getenv("POSTGRES_PORT"),
     }
 }
@@ -190,3 +191,13 @@ ADMIN_PASSWORD = os.getenv('ADMIN_PASSWORD')
 
 SERVER_EMAIL = EMAIL_HOST_USER
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+
+# База данных для тестов
+if "test" in sys.argv:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
+    }
